@@ -9,12 +9,12 @@ import SwiftUI
 
 @main
 struct ExoPredictApp: App {
-    var body: some Scene {
-        WindowGroup {
-            ContentView()
-                .onAppear {
-                    print("[ExoPredictApp] Window appeared")
-                }
-        }
-    }
+	var body: some Scene {
+		WindowGroup {
+			ContentView()
+				.onAppear {
+					print("[ExoPredictApp] Window appeared")
+				}
+		}
+	}
 }

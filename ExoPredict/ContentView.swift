@@ -32,61 +32,90 @@ struct ContentView: View {
 
 	var body: some View {
 		NavigationStack {
-			List {
-				Section("Flags") {
-					Toggle("FP Flag NT", isOn: $koi_fpflag_nt)
-					Toggle("FP Flag SS", isOn: $koi_fpflag_ss)
-					Toggle("FP Flag CO", isOn: $koi_fpflag_co)
-					Toggle("FP Flag EC", isOn: $koi_fpflag_ec)
-				}
+			ZStack {
+				List {}
+					.listStyle(.sidebar)
+				Form {
+					Section("Flags") {
+						Toggle("Not Transit-Like False Positive Flag", isOn: $koi_fpflag_nt)
+						Toggle("FP Flag SS", isOn: $koi_fpflag_ss)
+						Toggle("FP Flag CO", isOn: $koi_fpflag_co)
+						Toggle("FP Flag EC", isOn: $koi_fpflag_ec)
+					}
 
-				Section("Planet properties") {
-					Slider(value: $koi_score, in: 0 ... 1, step: 0.001) {
-						Text("KOI Score")
+					Section("Planet properties") {
+						propertySlider(title: "Disposition Score", value: $koi_score, range: 0 ... 1)
+						propertySlider(title: "Orbital Period [days]", value: $koi_period, range: 0 ... 60)
+						propertySlider(title: "Transit Epoch [BKJD]", value: $koi_time0bk, range: 0 ... 200)
+						propertySlider(title: "Impact Parameter", value: $koi_impact, range: 0 ... 1)
+						propertySlider(title: "Transit Duration [hrs]", value: $koi_duration, range: 0 ... 5)
+						propertySlider(title: "Transit Depth [ppm]", value: $koi_depth, range: 0 ... 15000)
+						propertySlider(title: "Planetary Radius [Earth radii]", value: $koi_prad, range: 0 ... 20)
+						propertySlider(title: "Equilibrium Temperature [K]", value: $koi_teq, range: 0 ... 2000)
+						propertySlider(title: "Insolation Flux [Earth flux]", value: $koi_insol, range: 0 ... 15000)
+						propertySlider(title: "Transit Signal-to-Noise", value: $koi_model_snr, range: 0 ... 40)
+						Stepper(value: $koi_tce_plnt_num, in: 1 ... 5) {
+							Text("TCE Planet Number: \(koi_tce_plnt_num)")
+								.contentTransition(.numericText())
+								.animation(.default, value: koi_tce_plnt_num)
+						}
+						propertySlider(title: "Stellar Effective Temperature [K]", value: $koi_steff, range: 4000 ... 6500)
+						propertySlider(title: "Stellar Surface Gravity [log10(cm/s**2)]", value: $koi_slogg, range: 3.5 ... 5.0)
+						propertySlider(title: "Stellar Radius [Solar radii]", value: $koi_srad, range: 0.5 ... 2.0)
+						propertySlider(title: "Kepler-band [mag]", value: $koi_kepmag, range: 10 ... 16)
 					}
-					Slider(value: $koi_period, in: 0 ... 60, step: 0.001) {
-						Text("Period (days)")
+
+					Button("Predict KOI Disposition") {
+						modelWrapper.predict(
+							koi_score: koi_score,
+							koi_fpflag_nt: koi_fpflag_nt ? 1.0 : 0.0,
+							koi_fpflag_ss: koi_fpflag_ss ? 1.0 : 0.0,
+							koi_fpflag_co: koi_fpflag_co ? 1.0 : 0.0,
+							koi_fpflag_ec: koi_fpflag_ec ? 1.0 : 0.0,
+							koi_period: koi_period,
+							koi_time0bk: koi_time0bk,
+							koi_impact: koi_impact,
+							koi_duration: koi_duration,
+							koi_depth: koi_depth,
+							koi_prad: koi_prad,
+							koi_teq: koi_teq,
+							koi_insol: koi_insol,
+							koi_model_snr: koi_model_snr,
+							koi_tce_plnt_num: Double(koi_tce_plnt_num),
+							koi_steff: koi_steff,
+							koi_slogg: koi_slogg,
+							koi_srad: koi_srad,
+							koi_kepmag: koi_kepmag
+						)
 					}
-					Slider(value: $koi_time0bk, in: 0 ... 200, step: 0.001) {
-						Text("Time0bk")
+					.disabled(modelWrapper.isLoading || modelWrapper.loadError != nil)
+					.buttonStyle(.glassProminent)
+					.controlSize(.extraLarge)
+					.buttonBorderShape(.capsule)
+					.foregroundStyle(.white)
+
+					Text("Prediction: \(modelWrapper.predictionResult ?? "")")
+						.transition(.opacity)
+						.font(.headline)
+						.contentTransition(.numericText())
+						.animation(.default, value: modelWrapper.predictionResult)
+
+					if modelWrapper.isLoading {
+						ProgressView("Loading model…")
 					}
-					Slider(value: $koi_impact, in: 0 ... 1, step: 0.001) {
-						Text("Impact")
-					}
-					Slider(value: $koi_duration, in: 0 ... 5, step: 0.001) {
-						Text("Duration")
-					}
-					Slider(value: $koi_depth, in: 0 ... 15000, step: 1) {
-						Text("Depth")
-					}
-					Slider(value: $koi_prad, in: 0 ... 20, step: 0.01) {
-						Text("Planet radius")
-					}
-					Slider(value: $koi_teq, in: 0 ... 2000, step: 1) {
-						Text("Teq")
-					}
-					Slider(value: $koi_insol, in: 0 ... 15000, step: 1) {
-						Text("Insolation")
-					}
-					Slider(value: $koi_model_snr, in: 0 ... 40, step: 0.01) {
-						Text("Model SNR")
-					}
-					Stepper("TCE Planet Num: \(koi_tce_plnt_num)", value: $koi_tce_plnt_num, in: 1 ... 5)
-					Slider(value: $koi_steff, in: 4000 ... 6500, step: 1) {
-						Text("Stellar Teff")
-					}
-					Slider(value: $koi_slogg, in: 3.5 ... 5.0, step: 0.001) {
-						Text("Stellar logg")
-					}
-					Slider(value: $koi_srad, in: 0.5 ... 2.0, step: 0.001) {
-						Text("Stellar radius")
-					}
-					Slider(value: $koi_kepmag, in: 10 ... 16, step: 0.001) {
-						Text("Kepler mag")
+
+					if let error = modelWrapper.loadError {
+						Text(error)
+							.foregroundStyle(.red)
 					}
 				}
-
-                Button("Predict KOI Disposition") {
+				.formStyle(.columns)
+				.background(Color.clear)
+				.navigationTitle("ExoPredict")
+				.frame(minWidth: 335, maxWidth: 650)
+				.padding()
+				.onAppear {
+					modelWrapper.loadModel()
 					modelWrapper.predict(
 						koi_score: koi_score,
 						koi_fpflag_nt: koi_fpflag_nt ? 1.0 : 0.0,
@@ -109,28 +138,18 @@ struct ContentView: View {
 						koi_kepmag: koi_kepmag
 					)
 				}
-				.disabled(modelWrapper.isLoading || modelWrapper.loadError != nil)
-				.buttonStyle(.borderedProminent)
-
-				if let result = modelWrapper.predictionResult {
-					Text("Prediction: \(result)")
-						.font(.headline)
-				}
-
-				if modelWrapper.isLoading {
-					ProgressView("Loading model…")
-				}
-
-				if let error = modelWrapper.loadError {
-					Text(error)
-						.foregroundStyle(.red)
-				}
 			}
-			.listStyle(.sidebar)
-			.navigationTitle("ExoPredict")
 		}
-		.onAppear {
-			modelWrapper.loadModel()
+	}
+
+	@ViewBuilder
+	private func propertySlider(title: String, value: Binding<Double>, range: ClosedRange<Double>) -> some View {
+		HStack {
+			Text(title)
+			Slider(value: value, in: range)
+			Text(String(format: "%.2f", value.wrappedValue))
+				.contentTransition(.numericText())
+				.animation(.default, value: value.wrappedValue)
 		}
 	}
 }
