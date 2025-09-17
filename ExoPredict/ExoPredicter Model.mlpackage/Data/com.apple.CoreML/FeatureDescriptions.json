@@ -1,0 +1,75 @@
+{
+  "Inputs" : {
+    "koi_model_snr" : {
+      "MLFeatureShortDescription" : ""
+    },
+    "koi_slogg" : {
+      "MLFeatureShortDescription" : ""
+    },
+    "koi_fpflag_nt" : {
+      "MLFeatureShortDescription" : ""
+    },
+    "koi_kepmag" : {
+      "MLFeatureShortDescription" : ""
+    },
+    "koi_period" : {
+      "MLFeatureShortDescription" : ""
+    },
+    "koi_fpflag_ss" : {
+      "MLFeatureShortDescription" : ""
+    },
+    "koi_prad" : {
+      "MLFeatureShortDescription" : ""
+    },
+    "koi_fpflag_co" : {
+      "MLFeatureShortDescription" : ""
+    },
+    "koi_score" : {
+      "MLFeatureShortDescription" : ""
+    },
+    "koi_time0bk" : {
+      "MLFeatureShortDescription" : ""
+    },
+    "koi_impact" : {
+      "MLFeatureShortDescription" : ""
+    },
+    "koi_fpflag_ec" : {
+      "MLFeatureShortDescription" : ""
+    },
+    "koi_insol" : {
+      "MLFeatureShortDescription" : ""
+    },
+    "koi_steff" : {
+      "MLFeatureShortDescription" : ""
+    },
+    "koi_tce_plnt_num" : {
+      "MLFeatureShortDescription" : ""
+    },
+    "koi_srad" : {
+      "MLFeatureShortDescription" : ""
+    },
+    "koi_teq" : {
+      "MLFeatureShortDescription" : ""
+    },
+    "koi_duration" : {
+      "MLFeatureShortDescription" : ""
+    },
+    "koi_depth" : {
+      "MLFeatureShortDescription" : ""
+    }
+  },
+  "Outputs" : {
+    "koi_disposition" : {
+      "MLFeatureShortDescription" : ""
+    },
+    "koi_dispositionProbability" : {
+      "MLFeatureShortDescription" : ""
+    }
+  },
+  "TrainingInputs" : {
+
+  },
+  "States" : {
+
+  }
+}

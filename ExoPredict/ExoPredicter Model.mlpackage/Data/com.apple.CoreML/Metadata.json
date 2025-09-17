@@ -1,0 +1,12 @@
+{
+  "MLModelCreatorDefinedKey" : {
+    "com.apple.coreml.model.preview.type" : "tabularClassifier",
+    "com.apple.createml.training.started" : "2025-09-17T09:41:00Z",
+    "com.apple.createml.version" : "26.0.0",
+    "com.apple.createml.training.finished" : "2025-09-17T09:41:08Z",
+    "com.apple.createml.app.tag" : "175.6",
+    "com.apple.createml.model.created" : "2025-09-17T09:41:08Z",
+    "com.apple.createml.app.version" : "6.2"
+  },
+  "MLModelAuthorKey" : "Adon Omeri"
+}

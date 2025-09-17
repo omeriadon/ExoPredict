@@ -12,6 +12,9 @@ struct ExoPredictApp: App {
     var body: some Scene {
         WindowGroup {
             ContentView()
+                .onAppear {
+                    print("[ExoPredictApp] Window appeared")
+                }
         }
     }
 }
